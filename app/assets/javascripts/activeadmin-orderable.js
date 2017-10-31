@@ -5,6 +5,18 @@
 
   $.fn.activeAdminSortable = function() {
     this.sortable({
+      start: function(event, ui) {
+        // disable ctrl click triggering
+        var $sortable = $(this);
+        if (event.ctrlKey) {
+          // this is done to address a bug in jQuery.UI
+          // we cannot cancel an in-progress sort without exceptions
+          setTimeout(function() {
+            $sortable.sortable('cancel');
+          }, 0);
+        }
+      },
+
       update: function(event, ui) {
         var item = ui.item.find('[data-sort-url]');
         var url = item.data('sort-url');
